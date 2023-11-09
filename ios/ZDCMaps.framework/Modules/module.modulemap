@@ -1,0 +1,6 @@
+framework module ZDCMaps {
+  umbrella header "ZDCMaps.h"
+
+  export *
+  module * { export * }
+}
