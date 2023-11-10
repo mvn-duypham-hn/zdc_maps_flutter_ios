@@ -44,6 +44,7 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
         
         let channelName = "vn.duypx/zdc_maps_ios_\(viewId)"
         _channel = FlutterMethodChannel(name: channelName, binaryMessenger: registrar.messenger())
+        
         let data = args as? [String: Any]
         let camera = ZdcMapJsonConversions.cameraPostionFromDictionary(data?["initialCameraPosition"] as? [String: Any])
         
@@ -56,6 +57,8 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
         _markersController = MarkersController(methodChannel: _channel, mapView: _mapView, registrar: registrar)
         
         super.init()
+        
+        _channel.setMethodCallHandler(onMethodCall)
         
         _mapView.delegate = self
         
@@ -74,6 +77,66 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
         //        let cloudMapId = options["cloudMapId"]
         //        if (cloudMapId != nil) {
         //        }
+        if let cameraTargetBounds = options["cameraTargetBounds"] as? NSArray {
+            if let bounds = cameraTargetBounds[0] as? NSArray {
+                setCameraTargetBounds(ZdcMapJsonConversions.coordinateBoundsFromLatLongs(bounds))
+            }
+        }
+        
+        if let compassEnabled = options["compassEnabled"] as? Bool {
+            setCompassEnabled(compassEnabled)
+        }
+        
+        if let indoorEnabled = options["indoorEnabled"] as? Bool {
+            setIndoorEnabled(indoorEnabled)
+        }
+        
+        if let mapType = options["mapType"] as? Int {
+            setMapType(mapType)
+        }
+        
+        if let zoomData = options["minMaxZoomPreference"] as? NSArray,
+           let minZoom = zoomData[0] as? Float,
+           let maxZoom = zoomData[1] as? Float {
+            setMinZoom(minZoom, maxZoom: maxZoom)
+        }
+        
+        if let padding = options["padding"] as? NSArray,
+           let top = padding[0] as? CGFloat,
+           let left = padding[1] as? CGFloat,
+           let bottom = padding[2] as? CGFloat,
+           let right = padding[3] as? CGFloat {
+            setPadding(top: top, left: left, bottom: bottom, right: right)
+        }
+        
+        if let rotateGesturesEnabled = options["rotateGesturesEnabled"] as? Bool {
+            setRotateGesturesEnabled(rotateGesturesEnabled)
+        }
+        
+        if let scrollGesturesEnabled = options["scrollGesturesEnabled"] as? Bool {
+            setScrollGesturesEnabled(scrollGesturesEnabled)
+        }
+        
+        if let tiltGesturesEnabled = options["tiltGesturesEnabled"] as? Bool {
+            setTiltGesturesEnabled(tiltGesturesEnabled)
+        }
+        
+        if let zoomGesturesEnabled = options["zoomGesturesEnabled"] as? Bool {
+            setZoomGesturesEnabled(zoomGesturesEnabled)
+        }
+        
+        if let myLocationEnabled = options["myLocationEnabled"] as? Bool {
+            setMyLocationEnabled(myLocationEnabled)
+        }
+        
+        if let myLocationButtonEnabled = options["myLocationButtonEnabled"] as? Bool {
+            setMyLocationButtonEnabled(myLocationButtonEnabled)
+        }
+        
+        if let trackCameraPosition = options["trackCameraPosition"] as? Bool {
+            setTrackCameraPosition(trackCameraPosition)
+        }
+        
     }
     
     func cameraPosition() -> ZMSCameraPosition? {
@@ -81,6 +144,53 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
             return _mapView.camera
         }
         return nil
+    }
+    
+    func setCameraTargetBounds(_ bounds: ZMSCoordinateBounds) {
+        //        _mapView.
+    }
+    func setCompassEnabled(_ enabled: Bool) {
+        _mapView.settings.compassButton = enabled
+    }
+    
+    func setIndoorEnabled(_ enabled: Bool) {
+        _mapView.settings.indoorEnabled = enabled
+    }
+    
+    func setMapType(_ typeValue: Int) {
+        _mapView.mapType = _mapView.mapTypeList[typeValue]
+    }
+    
+    func setMinZoom(_ minZoom: Float, maxZoom: Float) {
+        _mapView.setMinZoom(minZoom, maxZoom: maxZoom)
+    }
+    
+    func setPadding(top: CGFloat, left: CGFloat, bottom: CGFloat, right: CGFloat) {
+        _mapView.padding = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
+    }
+    
+    func setRotateGesturesEnabled(_ enabled: Bool) {
+        _mapView.settings.rotateGestures = enabled;
+    }
+    
+    func setScrollGesturesEnabled(_ enabled: Bool) {
+        _mapView.settings.scrollGestures = enabled;
+    }
+    
+    func setTiltGesturesEnabled(_ enabled: Bool) {
+        _mapView.settings.tiltGestures = enabled;
+    }
+    
+    func setZoomGesturesEnabled(_ enabled: Bool) {
+        _mapView.settings.zoomGestures = enabled;
+    }
+    
+    func setMyLocationEnabled(_ enabled: Bool) {
+        _mapView.isMyLocationEnabled = enabled
+    }
+    
+    func setMyLocationButtonEnabled(_ enabled: Bool) {
+        _mapView.settings.myLocationButton = enabled;
     }
     
     func setTrackCameraPosition(_ enabled: Bool) {
@@ -134,7 +244,7 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
         case "map#isScrollGesturesEnabled":
             result(_mapView.settings.scrollGestures)
         case "map#isMyLocationButtonEnabled":
-            result(_mapView.settings.myLocationButton)
+            result(_mapView.isMyLocationEnabled)
         case "map#isTrafficEnabled":
             result(false)
         case "map#isBuildingsEnabled":
@@ -187,6 +297,16 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
             }
             
             _markersController.isInfoWindowShownForMarkerWithIdentifier(markerId, result: result)
+        case "tileOverlays#update":
+            result(nil)
+        case "tileOverlays#clearTileCache":
+            result(nil)
+        case "circles#update":
+            result(nil)
+        case "polygons#update":
+            result(nil)
+        case "polylines#update":
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }
