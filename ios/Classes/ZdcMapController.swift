@@ -342,5 +342,13 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
         }
         
     }
+
+    func mapView(_ mapView: ZMSMapView, willMove gesture: Bool) {
+        self._channel.invokeMethod("camera#onMoveStarted", arguments: ["isGesture": gesture])
+    }
+    
+    func mapView(_ mapView: ZMSMapView, didChange position: ZMSCameraPosition) {
+        self._channel.invokeMethod("camera#onMove", arguments: ["position": ZdcMapJsonConversions.dictionaryFromPosition(position)])
+    }
     
 }
