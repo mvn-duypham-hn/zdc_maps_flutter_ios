@@ -350,5 +350,12 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
     func mapView(_ mapView: ZMSMapView, didChange position: ZMSCameraPosition) {
         self._channel.invokeMethod("camera#onMove", arguments: ["position": ZdcMapJsonConversions.dictionaryFromPosition(position)])
     }
+
+    func mapView(_ mapView: ZMSMapView, didTap marker: ZMSMarker) -> Bool {
+        return _markersController.didTapMarkerWithIdentifier(marker.userData)
+    }
     
+    func mapView(_ mapView: ZMSMapView, idleAt position: ZMSCameraPosition) {
+        self._channel.invokeMethod("camera#onIdle", arguments: [])
+    }
 }
