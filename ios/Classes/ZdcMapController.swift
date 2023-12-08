@@ -252,6 +252,7 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
         case "map#getTileOverlayInfo":
             result(nil)
         case "map#setStyle":
+            setMapType(1)
             result(nil)
         case "camera#animate":
             if let data = call.arguments as? [String: AnyObject] {
