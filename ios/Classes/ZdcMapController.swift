@@ -244,7 +244,7 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
         case "map#isScrollGesturesEnabled":
             result(_mapView.settings.scrollGestures)
         case "map#isMyLocationButtonEnabled":
-            result(_mapView.isMyLocationEnabled)
+            result(_mapView.settings.myLocationButton)
         case "map#isTrafficEnabled":
             result(false)
         case "map#isBuildingsEnabled":
@@ -324,7 +324,7 @@ class ZdcMapController: NSObject, FlutterPlatformView, ZMSMapViewDelegate {
     }
     
     func animateWithCameraUpdate(_ cameraUpdate: ZMSCameraUpdate) {
-        _mapView.animate(with: cameraUpdate, duration: 1)
+        _mapView.animate(with: cameraUpdate, duration: 0.5)
     }
     
     func moveWithCameraUpdate(_ cameraUpdate: ZMSCameraUpdate) {
