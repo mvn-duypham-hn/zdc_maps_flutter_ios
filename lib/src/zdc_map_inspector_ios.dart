@@ -8,10 +8,10 @@ import 'package:zdc_maps_flutter_platform_interface/zdc_maps_flutter_platform_in
 
 /// An Android of implementation of [GoogleMapsInspectorPlatform].
 @visibleForTesting
-class GoogleMapsInspectorIOS extends ZdcMapsInspectorPlatform {
+class ZdcMapsInspectorIOS extends ZdcMapsInspectorPlatform {
   /// Creates a method-channel-based inspector instance that gets the channel
   /// for a given map ID from [channelProvider].
-  GoogleMapsInspectorIOS(MethodChannel? Function(int mapId) channelProvider)
+  ZdcMapsInspectorIOS(MethodChannel? Function(int mapId) channelProvider)
       : _channelProvider = channelProvider;
 
   final MethodChannel? Function(int mapId) _channelProvider;

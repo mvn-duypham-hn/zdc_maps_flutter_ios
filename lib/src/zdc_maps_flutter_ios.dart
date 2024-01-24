@@ -585,7 +585,7 @@ class ZdcMapsFlutterIOS extends ZdcMapsFlutterPlatform {
   @visibleForTesting
   void enableDebugInspection() {
     ZdcMapsInspectorPlatform.instance =
-        GoogleMapsInspectorIOS((int mapId) => _channel(mapId));
+        ZdcMapsInspectorIOS((int mapId) => _channel(mapId));
   }
 }
 

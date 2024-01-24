@@ -30,7 +30,7 @@ xcuserdata
 
 *.pyc
 *sync/
-Icon?
+# Icon?
 .tags*
 
 /Flutter/Generated.xcconfig
